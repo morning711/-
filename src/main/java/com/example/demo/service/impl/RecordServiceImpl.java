@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.common.Result;
+import com.example.demo.entity.Book;
 import com.example.demo.entity.Record;
 import com.example.demo.mapper.RecordMapper;
 import com.example.demo.service.IRecordService;
@@ -16,5 +18,4 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class RecordServiceImpl extends ServiceImpl<RecordMapper, Record> implements IRecordService {
-
 }

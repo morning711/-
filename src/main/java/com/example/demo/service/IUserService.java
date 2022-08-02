@@ -16,12 +16,12 @@ import java.util.List;
  * @since 2022-07-31
  */
 public interface IUserService extends IService<User> {
-    Integer insertUser(UserDTO userDTO);
+    Boolean insertUser(UserDTO userDTO);
     Boolean deleteByUserId(int userId);
-    ReUserDTO findByUserId(int userId);
-    List<ReUserDTO> findByUserName(String userName);
-    List<ReUserDTO> findByUserStudyNumber(String userStudyNumber);
-    ReUserDTO findByUserPhone(String userPhone);
+    User findByUserId(int userId);
+    List<User> findByUserName(String userName);
+    List<User> findByUserStudyNumber(String userStudyNumber);
+    List<User> findByUserPhone(String userPhone);
     Boolean updateByUserId(int userId,UserDTO userDTO);
     Boolean changeTag(int userId,int userTag);
 }

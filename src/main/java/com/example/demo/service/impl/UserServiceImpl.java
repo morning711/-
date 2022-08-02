@@ -31,14 +31,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     @Transactional
-    public Integer insertUser(UserDTO userDTO) {
+    public Boolean insertUser(UserDTO userDTO) {
         User user=userDTO.toUser();
         //设置初始密码123456，需要进行md5加密处理
         //设置初始学生权限为2
         user.setUserpassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
         user.setUsertag(2);
-        save(user);
-        return user.getUserid();
+        return save(user);
     }
 
     @Override
@@ -48,40 +47,43 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public ReUserDTO findByUserId(int userId) {
+    public User findByUserId(int userId) {
         User user=getById(userId);
         if (user!=null){
-            return new ReUserDTO(user);
+            return user;
         }
+        //计划是抛出一个查询不到的业务异常
         return null;
     }
 
     @Override
-    public List<ReUserDTO> findByUserName(String userName) {
+    public List<User> findByUserName(String userName) {
         List<User> users=list(new QueryWrapper<User>().like("username",userName));
-        List<ReUserDTO> reUserDTOS=new ArrayList<>();
-        for (User user:users){
-            reUserDTOS.add(new ReUserDTO(user));
+        if (!users.isEmpty()){
+            return users;
         }
-        return reUserDTOS;
+        //计划是抛出一个查询不到的业务异常
+        return null;
+
     }
 
     @Override
-    public List<ReUserDTO> findByUserStudyNumber(String userStudyNumber) {
+    public List<User> findByUserStudyNumber(String userStudyNumber) {
         List<User> users=list(new QueryWrapper<User>().like("userstudynumber",userStudyNumber));
-        List<ReUserDTO> reUserDTOS=new ArrayList<>();
-        for (User user:users){
-            reUserDTOS.add(new ReUserDTO(user));
+        if (!users.isEmpty()){
+            return users;
         }
-        return reUserDTOS;
+        //计划是抛出一个查询不到的业务异常
+        return null;
     }
 
     @Override
-    public ReUserDTO findByUserPhone(String userPhone) {
-        User user=getOne(new QueryWrapper<User>().eq("userphone",userPhone));
-        if (user!=null){
-            return new ReUserDTO(user);
+    public List<User> findByUserPhone(String userPhone) {
+        List<User> users=list(new QueryWrapper<User>().like("userPhone",userPhone));
+        if (!users.isEmpty()){
+            return users;
         }
+        //计划是抛出一个查询不到的业务异常
         return null;
     }
 

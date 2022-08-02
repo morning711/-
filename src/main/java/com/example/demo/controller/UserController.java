@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
 
+
 import com.example.demo.common.Result;
 import com.example.demo.controller.DTO.postDTOs.UserDTO;
 import com.example.demo.controller.DTO.returnDTOs.ReUserDTO;
 import com.example.demo.entity.User;
 import com.example.demo.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +21,7 @@ import java.util.List;
  * @author Always
  * @since 2022-07-31
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -28,9 +31,10 @@ public class UserController {
     /**
      * 增加用户
      */
-    @PostMapping
+    @PostMapping("/AddUser")
     public Result<String> addUser(@RequestBody UserDTO userDTO){
         userService.insertUser(userDTO);
+        //没太理解这个error怎么抛出哎，想的是如果上面增加失败返回false就抛error
         return Result.success("新增成功");
     }
 
@@ -38,28 +42,26 @@ public class UserController {
      * 根据id删除用户
      */
 
-    @DeleteMapping("{userId}")
+    @DeleteMapping("/DeleteUser/{userId}")
     public Result<String> deleteUser(@PathVariable int userId){
-        if (userService.deleteByUserId(userId)){
-            return Result.success("删除成功");
-        }else {
-            return Result.error("1","删除失败");//id不存在
-        }
+        userService.deleteByUserId(userId);
+        //没太理解这个error怎么抛出哎，想的是如果上面删除失败返回false就抛error
+        return Result.success("删除成功");
     }
 
     /**
      * 根据userId查找（查找到的是唯一的）
      */
     @GetMapping("/FindUserById/{userId}")
-    public Result<ReUserDTO> findByUserId(@PathVariable int userId){
+    public Result<User> findByUserId(@PathVariable int userId){
         return Result.success(userService.findByUserId(userId));
     }
 
     /**
      * 根据userName查找（模糊查找）
      */
-    @GetMapping("/FindUserByName/{username}")
-    public Result<List<ReUserDTO>> findByUserName(@PathVariable String userName){
+    @GetMapping("/FindUserByName/{userName}")
+    public Result<List<User>> findByUserName(@PathVariable String userName){
         return Result.success(userService.findByUserName(userName));
     }
 
@@ -67,15 +69,15 @@ public class UserController {
      * 根据userStudyNumber查找（模糊查找)
      */
     @GetMapping("/FindUserByStudyNumber/{userStudyNumber}")
-    public Result<List<ReUserDTO>> findByUserStudyNumber(@RequestParam String userStudyNumber){
+    public Result<List<User>> findByUserStudyNumber(@PathVariable String userStudyNumber){
         return Result.success(userService.findByUserStudyNumber(userStudyNumber));
     }
 
     /**
-     * 根据userPhone查找(唯一的)
+     * 根据userPhone查找(模糊查找)
      */
     @GetMapping("/FindUserByPhone/{userPhone}")
-    public Result<ReUserDTO> findByUserPhone(@RequestParam String userPhone){
+    public Result<List<User>> findByUserPhone(@PathVariable String userPhone){
         return Result.success(userService.findByUserPhone(userPhone));
     }
 
@@ -84,11 +86,9 @@ public class UserController {
      */
     @PutMapping("/UpdateUser/{userId}")
     public Result<String> updateUser(@PathVariable int userId,@RequestBody UserDTO userDTO){
-        if (userService.updateByUserId(userId,userDTO)){
-            return Result.success("更新用户信息成功");
-        }else {
-            return Result.error("1","更新用户信息失败");
-        }
+        userService.updateByUserId(userId,userDTO);
+        //没太理解这个error怎么抛出哎，想的是如果上面更新失败返回false就抛error
+        return Result.success("更新用户信息成功");
     }
 
     /**
@@ -96,11 +96,9 @@ public class UserController {
      */
     @GetMapping("/ChangeTag")
     public Result<String> changeTag(@RequestParam int userId,@RequestParam int userTag){
-        if (userService.changeTag(userId,userTag)){
-            return Result.success("更改状态成功");
-        }else {
-            return Result.error("1","更改状态失败");
-        }
+       userService.changeTag(userId,userTag);
+        //没太理解这个error怎么抛出哎，想的是如果上面更新失败返回false就抛error
+       return Result.success("更改状态成功");
     }
 
     /**
@@ -108,7 +106,7 @@ public class UserController {
      */
     @GetMapping("/allUser")
     public Result<List<User>> getAll(){
-        return new Result<>(userService.list());
+        return Result.success(userService.list());
     }
 
 

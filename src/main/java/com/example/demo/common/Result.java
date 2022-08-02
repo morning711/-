@@ -2,9 +2,11 @@ package com.example.demo.common;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
 @AllArgsConstructor
+@Slf4j
 public class Result<T> {
     private String code;
     private String msg;
@@ -35,6 +37,7 @@ public class Result<T> {
     }
     public static <T> Result<T> success(T data){
         Result<T> result=new Result<>(data);
+        log.info(result.getData().toString());
         result.setCode("0");
         result.setMsg("成功");
         return result;
